@@ -4,6 +4,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'Cocos Challenge',
   slug: 'rn-cc-challenge',
+  scheme: 'rnccchallenge',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
@@ -20,6 +21,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
   },
   plugins: [
+    'expo-router',
+    '@sentry/react-native',
     [
       'expo-splash-screen',
       {
@@ -37,6 +40,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ],
   web: {
     favicon: './assets/favicon.ico',
+    bundler: 'metro',
   },
   extra: {
     apiUrl: process.env.EXPO_PUBLIC_API_URL,

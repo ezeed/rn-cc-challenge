@@ -10,6 +10,11 @@ module.exports = defineConfig([
       react: {
         version: '19.1.0',
       },
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
+      },
     },
     ignores: ['node_modules/', '.expo/', 'dist/'],
   },
