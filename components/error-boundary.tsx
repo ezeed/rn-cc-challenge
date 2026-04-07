@@ -1,6 +1,9 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { monitoring } from '@/lib/monitoring/monitoring';
+import { UIPressable } from '@/components/ui/ui-pressable';
+import { UIText } from '@/components/ui/ui-text';
+import { UIView } from '@/components/ui/ui-view';
 
 type Props = {
   children: ReactNode;
@@ -38,19 +41,25 @@ export class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
-      return (
-        <View style={[styles.container]}>
-          <Text style={[styles.title]}>Ocurrio un error inesperado</Text>
-          <Text style={[styles.message]}>Por favor, vuelve a intentar mas tarde.</Text>
-          <Pressable style={[styles.secondaryButton]} onPress={this.handleRetry}>
-            <Text style={[styles.secondaryButtonText]}>Reintentar</Text>
-          </Pressable>
-        </View>
-      );
+      return <DefaultErrorFallback onRetry={this.handleRetry} />;
     }
 
     return this.props.children;
   }
+}
+
+function DefaultErrorFallback({ onRetry }: { onRetry: () => void }) {
+  return (
+    <UIView background="background" style={styles.container}>
+      <UIText variant="title" textAlign="center" style={styles.title}>
+        Ocurrio un error inesperado
+      </UIText>
+      <UIText color="muted" textAlign="center" style={styles.message}>
+        Por favor, vuelve a intentar mas tarde.
+      </UIText>
+      <UIPressable variant="secondary" onPress={onRetry} text="Reintentar" />
+    </UIView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -62,24 +71,8 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 8,
-    fontSize: 20,
-    fontWeight: '600',
-    textAlign: 'center',
   },
   message: {
     marginBottom: 24,
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  secondaryButton: {
-    minWidth: 180,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  secondaryButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
   },
 });
