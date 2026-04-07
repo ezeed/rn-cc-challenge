@@ -1,35 +1,100 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { useTheme } from '@/lib/theme/theme-provider';
+import { StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { useInstruments, InstrumentsList, useInstrumentSort } from '@/features/instruments';
+import { UISafeArea } from '@/components/ui/ui-safe-area';
+import { UIInput } from '@/components/ui/ui-input';
+import { UIView } from '@/components/ui/ui-view';
+import { UIPressable } from '@/components/ui/ui-pressable';
+import { ChipLabel } from '@/features/instruments/components/chip-label';
 
 export default function InstrumentsScreen() {
-  const { colors } = useTheme();
+  const [search, setSearch] = useState('');
+  const { data: instruments, isLoading, error, refetch } = useInstruments(search);
+  const { sortBy, sortedInstruments, handleSortPress, handleResetSort, getSortArrow } =
+    useInstrumentSort(instruments ?? []);
+
+  const handleSearch = (text: string) => {
+    setSearch(text.toUpperCase());
+  };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.text, { color: colors.text }]}>Instruments</Text>
-    </View>
+    <UISafeArea>
+      <UIView style={styles.container}>
+        <UIInput
+          placeholder="Buscar Instrumentos"
+          icon="search"
+          value={search}
+          clearable
+          onChangeText={handleSearch}
+        />
+        <UIView style={styles.sortRow}>
+          <UIPressable
+            size="sm"
+            appearance="outline"
+            active={sortBy === 'ticker'}
+            onPress={() => handleSortPress('ticker')}
+          >
+            <ChipLabel
+              label="Ticker"
+              value="ticker"
+              sortBy={sortBy}
+              arrow={getSortArrow('ticker') ?? ''}
+            />
+          </UIPressable>
+          <UIPressable
+            size="sm"
+            appearance="outline"
+            active={sortBy === 'price'}
+            onPress={() => handleSortPress('price')}
+          >
+            <ChipLabel
+              label="Precio"
+              value="price"
+              sortBy={sortBy}
+              arrow={getSortArrow('price') ?? ''}
+            />
+          </UIPressable>
+          <UIPressable
+            size="sm"
+            appearance="outline"
+            active={sortBy === 'profit'}
+            onPress={() => handleSortPress('profit')}
+          >
+            <ChipLabel
+              label="Retorno"
+              value="profit"
+              sortBy={sortBy}
+              arrow={getSortArrow('profit') ?? ''}
+            />
+          </UIPressable>
+          <UIPressable
+            disabled={sortBy === null}
+            size="sm"
+            appearance="outline"
+            text="Reset"
+            onPress={handleResetSort}
+          />
+        </UIView>
+        <InstrumentsList
+          instruments={sortedInstruments ?? []}
+          isLoading={isLoading}
+          error={error}
+          onRetry={refetch}
+        />
+      </UIView>
+    </UISafeArea>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    gap: 20,
+    padding: 16,
   },
-  text: {
-    marginBottom: 16,
-    fontSize: 20,
-    fontWeight: '600',
-  },
-  button: {
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#0061e0',
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '600',
+  sortRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
   },
 });

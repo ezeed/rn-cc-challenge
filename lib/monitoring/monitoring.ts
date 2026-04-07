@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/react-native';
+import type { ComponentType } from 'react';
 
 const DSN = process.env.EXPO_PUBLIC_SENTRY_DSN;
 const IS_DEV = __DEV__;
@@ -7,15 +8,14 @@ const SHOULD_SEND = !IS_DEV || ALLOW_DEV_SENTRY;
 
 export const monitoring = {
   init(): void {
-    if (!DSN) return;
+    if (!DSN || !SHOULD_SEND) return;
 
     Sentry.init({
       dsn: DSN,
       debug: IS_DEV,
-      enabled: SHOULD_SEND,
+      enabled: true,
       environment: IS_DEV ? 'development' : 'production',
       beforeSend(event) {
-        if (!SHOULD_SEND) return null;
         return event;
       },
     });
@@ -40,5 +40,5 @@ export const monitoring = {
     Sentry.captureMessage(message, level);
   },
 
-  wrap: Sentry.wrap,
+  wrap: SHOULD_SEND ? Sentry.wrap : <T extends ComponentType<any>>(Component: T) => Component,
 };
