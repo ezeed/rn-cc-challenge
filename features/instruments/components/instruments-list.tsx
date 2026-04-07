@@ -31,6 +31,7 @@ export function InstrumentsList({ instruments, isLoading, error, onRetry }: Prop
   return (
     <FlatList
       data={instruments}
+      ListEmptyComponent={<UIText>No hay instrumentos para mostrar.</UIText>}
       refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRetry} />}
       keyExtractor={(instrument) => instrument.id}
       renderItem={({ item: instrument }) => <InstrumentItem item={instrument} />}
