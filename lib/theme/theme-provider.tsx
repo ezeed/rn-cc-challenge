@@ -1,6 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SystemUI from 'expo-system-ui';
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 import { ColorSchemeName, useColorScheme } from 'react-native';
+import { colorPalettes, typography } from '@/lib/theme/tokens';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 export type ResolvedTheme = 'light' | 'dark';
@@ -26,43 +28,11 @@ type ThemeContextValue = {
   mode: ThemeMode;
   resolvedTheme: ResolvedTheme;
   colors: ThemeColors;
+  typography: typeof typography;
   setMode: (mode: ThemeMode) => void;
 };
 
-const LIGHT_COLORS: ThemeColors = {
-  background: '#f2f7fd',
-  surface: '#ffffff',
-  surfaceMuted: '#dbeafe',
-  text: '#0f172a',
-  textMuted: '#475569',
-  white: '#ffffff',
-  primary: '#0061e0',
-  secondary: '#002c66',
-  success: '#15803d',
-  warning: '#b45309',
-  danger: '#b42318',
-  border: '#d9e5f3',
-  tabBar: '#ffffff',
-  tabIcon: '#64748b',
-};
-
-const DARK_COLORS: ThemeColors = {
-  background: '#08111f',
-  surface: '#0f172a',
-  surfaceMuted: '#172554',
-  text: '#f8fafc',
-  textMuted: '#94a3b8',
-  white: '#ffffff',
-  primary: '#60a5fa',
-  secondary: '#7fb2ff',
-  success: '#4ade80',
-  warning: '#fbbf24',
-  danger: '#f87171',
-  border: '#1e293b',
-  tabBar: '#0f172a',
-  tabIcon: '#94a3b8',
-};
-
+const THEME_MODE_STORAGE_KEY = 'theme-mode';
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function resolveTheme(mode: ThemeMode, systemScheme: ColorSchemeName): ResolvedTheme {
@@ -75,7 +45,8 @@ export function ThemeProvider({ children }: PropsWithChildren) {
   const [mode, setMode] = useState<ThemeMode>('system');
 
   const resolvedTheme = resolveTheme(mode, systemScheme);
-  const colors = resolvedTheme === 'dark' ? DARK_COLORS : LIGHT_COLORS;
+  const colors: ThemeColors = resolvedTheme === 'dark' ? colorPalettes.dark : colorPalettes.light;
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     SystemUI.setBackgroundColorAsync(colors.background).catch((error) => {
@@ -85,11 +56,38 @@ export function ThemeProvider({ children }: PropsWithChildren) {
     });
   }, [colors.background]);
 
+  useEffect(() => {
+    AsyncStorage.getItem(THEME_MODE_STORAGE_KEY)
+      .then((storedMode) => {
+        if (storedMode === 'system' || storedMode === 'light' || storedMode === 'dark') {
+          setMode(storedMode);
+        }
+      })
+      .catch((error) => {
+        if (__DEV__) {
+          console.warn('Failed to load theme mode', error);
+        }
+      })
+      .finally(() => {
+        setIsHydrated(true);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+    AsyncStorage.setItem(THEME_MODE_STORAGE_KEY, mode).catch((error) => {
+      if (__DEV__) {
+        console.warn('Failed to persist theme mode', error);
+      }
+    });
+  }, [isHydrated, mode]);
+
   const value = useMemo(
     () => ({
       mode,
       resolvedTheme,
       colors,
+      typography,
       setMode,
     }),
     [colors, mode, resolvedTheme],
