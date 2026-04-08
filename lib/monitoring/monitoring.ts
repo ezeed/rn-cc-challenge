@@ -6,6 +6,14 @@ const IS_DEV = __DEV__;
 const ALLOW_DEV_SENTRY = process.env.EXPO_PUBLIC_SENTRY_DEV === 'true';
 const SHOULD_SEND = !IS_DEV || ALLOW_DEV_SENTRY;
 
+function wrapComponent<T extends ComponentType<any>>(Component: T): T {
+  if (!SHOULD_SEND) {
+    return Component;
+  }
+
+  return Sentry.wrap(Component) as T;
+}
+
 export const monitoring = {
   init(): void {
     if (!DSN || !SHOULD_SEND) return;
@@ -40,5 +48,5 @@ export const monitoring = {
     Sentry.captureMessage(message, level);
   },
 
-  wrap: SHOULD_SEND ? Sentry.wrap : <T extends ComponentType<any>>(Component: T) => Component,
+  wrap: wrapComponent,
 };

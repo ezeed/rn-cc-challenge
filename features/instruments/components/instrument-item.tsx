@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { UIText } from '@/components/ui/ui-text';
 import { UITrend } from '@/components/ui/ui-trend';
 import { InstrumentProfit } from '../types';
@@ -5,34 +6,50 @@ import { UIView } from '@/components/ui/ui-view';
 import { useTheme } from '@/lib/theme/theme-provider';
 import { TickerLogo } from '@/components/ui/ticker-logo';
 import { formatPeso } from '@/lib/format-peso';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 
 export function InstrumentItem({ item }: { item: InstrumentProfit }) {
   const { colors } = useTheme();
   const logo = item.ticker.toUpperCase();
   return (
-    <UIView
-      style={[
-        styles.container,
-        {
-          backgroundColor: colors.background,
-        },
-      ]}
+    <Pressable
+      onPress={() =>
+        router.push({
+          pathname: '/order',
+          params: {
+            id: item.id,
+            ticker: item.ticker,
+            name: item.name,
+            price: String(item.last_price),
+            profit: String(item.profit),
+          },
+        })
+      }
     >
-      <UIView style={styles.row}>
-        {logo && <TickerLogo ticker={logo} />}
-        <UIView style={styles.content}>
-          <UIText style={{ fontWeight: 'bold' }}>{item.ticker}</UIText>
-          <UIText color="muted" ellipsizeMode="tail" numberOfLines={1}>
-            {item.name}
-          </UIText>
-        </UIView>
-        <UIView style={styles.values}>
-          <UIText style={{ fontWeight: 'bold' }}>{formatPeso(item.last_price)}</UIText>
-          <UITrend value={item.profit} />
+      <UIView
+        style={[
+          styles.container,
+          {
+            backgroundColor: colors.background,
+            borderColor: colors.border,
+          },
+        ]}
+      >
+        <UIView style={styles.row}>
+          {logo && <TickerLogo ticker={logo} />}
+          <UIView style={styles.content}>
+            <UIText style={{ fontWeight: 'bold' }}>{item.ticker}</UIText>
+            <UIText color="muted" ellipsizeMode="tail" numberOfLines={1}>
+              {item.name}
+            </UIText>
+          </UIView>
+          <UIView style={styles.values}>
+            <UIText style={{ fontWeight: 'bold' }}>{formatPeso(item.last_price)}</UIText>
+            <UITrend value={item.profit} />
+          </UIView>
         </UIView>
       </UIView>
-    </UIView>
+    </Pressable>
   );
 }
 
