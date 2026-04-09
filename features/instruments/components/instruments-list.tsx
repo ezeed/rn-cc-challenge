@@ -1,9 +1,8 @@
 import { InstrumentProfit } from '../types';
-import { UIView } from '@/components/ui/ui-view';
-import { UIPressable } from '@/components/ui/ui-pressable';
 import { ActivityIndicator, FlatList, RefreshControl } from 'react-native';
 import { InstrumentItem } from './instrument-item';
-import { UIText } from '@/components/ui/ui-text';
+import { EmptyState } from '@/components/empty-state';
+import { ErrorState } from '@/components/error-state';
 
 type Props = {
   instruments: InstrumentProfit[];
@@ -19,19 +18,18 @@ export function InstrumentsList({ instruments, isLoading, error, onRetry }: Prop
 
   if (error) {
     return (
-      <UIView>
-        <UIText style={{ marginBottom: 8 }}>
-          {`Error al cargar los instrumentos: ${error?.message || ''}`}
-        </UIText>
-        <UIPressable variant="danger" onPress={onRetry} text="Reintentar" />
-      </UIView>
+      <ErrorState
+        message={`Error al cargar los instrumentos: ${error?.message || ''}`}
+        onRetry={onRetry}
+      />
     );
   }
 
   return (
     <FlatList
+      contentContainerStyle={{ flexGrow: 1 }}
       data={instruments}
-      ListEmptyComponent={<UIText>No hay instrumentos para mostrar.</UIText>}
+      ListEmptyComponent={<EmptyState message="No hay instrumentos para mostrar." />}
       refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRetry} />}
       keyExtractor={(instrument) => instrument.id}
       renderItem={({ item: instrument }) => <InstrumentItem item={instrument} />}

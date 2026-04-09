@@ -1,0 +1,94 @@
+import { UIPressable } from '@/components/ui/ui-pressable';
+import { UIText } from '@/components/ui/ui-text';
+import { UIView } from '@/components/ui/ui-view';
+import { useTheme } from '@/lib/theme/theme-provider';
+import { ActivityIndicator, StyleSheet } from 'react-native';
+import { OrderSubmissionViewState } from '../types';
+import { router } from 'expo-router';
+
+type Props = {
+  submissionState: OrderSubmissionViewState;
+  handleReset: () => void;
+};
+
+export function OrderResult({ submissionState, handleReset }: Props) {
+  const { colors } = useTheme();
+  return (
+    <UIView style={styles.container}>
+      <UIView
+        style={[styles.card, { backgroundColor: colors.background, borderColor: colors.border }]}
+      >
+        {submissionState.kind === 'pending' && (
+          <>
+            <ActivityIndicator color={colors.primary} />
+            <UIText variant="title">Enviando orden</UIText>
+            <UIText color="muted">Estamos procesando tu orden.</UIText>
+          </>
+        )}
+        {submissionState.kind === 'error' && (
+          <>
+            <UIText variant="title">No se pudo enviar la orden</UIText>
+            <UIText color="danger">{submissionState.message}</UIText>
+          </>
+        )}
+        {submissionState.kind === 'success' && (
+          <>
+            <UIText variant="title">Resultado de la orden</UIText>
+            <UIText>{`Id de orden: ${submissionState.result.id}`}</UIText>
+            <UIText
+              color={
+                submissionState.result.status === 'REJECTED'
+                  ? 'danger'
+                  : submissionState.result.status === 'FILLED'
+                    ? 'primary'
+                    : 'secondary'
+              }
+            >{`Estado: ${submissionState.result.status}`}</UIText>
+          </>
+        )}
+      </UIView>
+
+      <UIView style={styles.row}>
+        <UIPressable
+          appearance="outline"
+          onPress={() => router.back()}
+          style={styles.flex}
+          text="Salir"
+        />
+        <UIPressable
+          disabled={submissionState.kind === 'pending'}
+          onPress={handleReset}
+          style={styles.flex}
+          text="Volver a operar"
+        />
+      </UIView>
+    </UIView>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    alignItems: 'center',
+    borderRadius: 16,
+    borderWidth: 1,
+    gap: 8,
+    padding: 16,
+  },
+  container: {
+    gap: 20,
+    paddingBottom: 24,
+  },
+  flex: {
+    flex: 1,
+    minWidth: 0,
+  },
+  row: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 12,
+    justifyContent: 'space-between',
+  },
+  section: {
+    gap: 8,
+  },
+});

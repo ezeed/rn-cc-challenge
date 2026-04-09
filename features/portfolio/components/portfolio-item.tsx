@@ -5,6 +5,7 @@ import { UIView } from '@/components/ui/ui-view';
 import { useTheme } from '@/lib/theme/theme-provider';
 import { formatPeso } from '@/lib/format-peso';
 import { StyleSheet } from 'react-native';
+import { TickerLogo } from '@/components/ui/ticker-logo';
 
 export function PortfolioItem({ item }: { item: PortfolioProfit }) {
   const { colors } = useTheme();
@@ -21,6 +22,7 @@ export function PortfolioItem({ item }: { item: PortfolioProfit }) {
       ]}
     >
       <UIView style={styles.header}>
+        <TickerLogo ticker={item.ticker.toUpperCase()} />
         <UIView style={styles.headerContent}>
           <UIText style={{ fontWeight: 'bold' }}>{item.ticker}</UIText>
           <UIText color="muted" ellipsizeMode="tail" numberOfLines={1}>

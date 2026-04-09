@@ -1,11 +1,5 @@
 import { ReactNode } from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  PressableProps,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import { ActivityIndicator, Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from '@/lib/theme/theme-provider';
 import { UIText, UITextColor } from './ui-text';
 
