@@ -1,0 +1,30 @@
+{
+  "cli": {
+    "version": ">= 18.4.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://dummy-api-topaz.vercel.app",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://2f826f647ad920abd6eaec779915b53b@o4511174041075712.ingest.us.sentry.io/4511174047170560",
+        "EXPO_PUBLIC_SENTRY_DEV": "false",
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true"
+      }
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

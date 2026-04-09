@@ -28,13 +28,7 @@ const logoMap: Record<string, number> = {
   TECO2: require('../../assets/logos/TECO2.webp'),
 } as const;
 
-export function TickerLogo({
-  ticker,
-  style,
-}: {
-  ticker: keyof typeof logoMap;
-  style?: ImageStyle;
-}) {
+export function TickerLogo({ ticker, style }: { ticker: string; style?: ImageStyle }) {
   const logo = logoMap[ticker.toUpperCase()];
   if (!logo) return null;
   return (

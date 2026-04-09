@@ -2,23 +2,22 @@ import { StyleSheet } from 'react-native';
 import { UIPressable } from '@/components/ui/ui-pressable';
 import { UIText } from '@/components/ui/ui-text';
 import { UIView } from '@/components/ui/ui-view';
-import client from '@/lib/api/api-client';
 import { getErrorMessage } from '@/lib/errors/api-errors';
 import { monitoring } from '@/lib/monitoring/monitoring';
 import { useTheme } from '@/lib/theme/theme-provider';
 import { useState } from 'react';
+import { useHTTPStatus } from '../hooks/use-http-status';
 
 type ResultState = {
   title: string;
   message: string;
 };
 
-const HTTP_STAT_US = 'https://httpstat.us';
-
 function ErrorTester() {
   const { colors } = useTheme();
   const [result, setResult] = useState<ResultState | null>(null);
   const [shouldCrash, setShouldCrash] = useState(false);
+  const { isPending, mutate } = useHTTPStatus();
 
   if (shouldCrash) {
     throw new Error('Dev ErrorBoundary test');
@@ -33,64 +32,46 @@ function ErrorTester() {
     });
   };
 
-  const clearResult = () => setResult(null);
+  const handleErrorTrigger = (status: string) => {
+    setResult(null);
+    mutate(status, {
+      onError: (error) => {
+        handleError(status, error);
+      },
+    });
+  };
 
   return (
     <UIView style={styles.container}>
       <UIText style={styles.sectionTitle}>Pruebas de errores</UIText>
-      <UIText color="muted">
-        Usa estos botones para validar mensajes, consola, red y monitoreo.
-      </UIText>
+      <UIText color="muted">Botones para validar mensajes de error.</UIText>
 
       <UIView style={styles.actionsGrid}>
         <UIPressable
           style={styles.gridButton}
           text="404"
-          onPress={async () => {
-            clearResult();
-            try {
-              await client.get(`${HTTP_STAT_US}/404`);
-            } catch (error) {
-              handleError('404', error);
-            }
-          }}
+          loading={isPending}
+          onPressIn={() => handleErrorTrigger('404')}
         />
 
         <UIPressable
           style={styles.gridButton}
           text="500"
-          onPress={async () => {
-            clearResult();
-            try {
-              await client.get(`${HTTP_STAT_US}/500`);
-            } catch (error) {
-              handleError('500', error);
-            }
-          }}
+          loading={isPending}
+          onPressIn={() => handleErrorTrigger('500')}
         />
 
         <UIPressable
           style={styles.gridButton}
-          text="timeout"
-          onPress={async () => {
-            clearResult();
-            try {
-              await client.get(`${HTTP_STAT_US}/200?sleep=5000`, {
-                timeout: 1_000,
-              });
-            } catch (error) {
-              handleError('timeout', error);
-            }
-          }}
+          text="401-Auth"
+          loading={isPending}
+          onPressIn={() => handleErrorTrigger('401')}
         />
 
         <UIPressable
           style={styles.gridButton}
           text="error manual"
-          onPress={() => {
-            clearResult();
-            handleError('manual', new Error('Dev manual error'));
-          }}
+          onPress={() => handleError('manual', new Error('Dev manual error'))}
         />
       </UIView>
 
@@ -100,7 +81,7 @@ function ErrorTester() {
           style={styles.footerButton}
           text="ErrorBoundary"
           onPress={() => {
-            clearResult();
+            setResult(null);
             setShouldCrash(true);
           }}
         />
@@ -118,6 +99,11 @@ function ErrorTester() {
         >
           <UIText style={styles.resultTitle}>Resultado: {result.title}</UIText>
           <UIText color="muted">{result.message}</UIText>
+          <UIPressable
+            appearance="outline"
+            onPress={() => setResult(null)}
+            text="Limpiar resultado"
+          />
         </UIView>
       ) : null}
     </UIView>
