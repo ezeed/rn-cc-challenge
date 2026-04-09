@@ -21,6 +21,7 @@ export function usePortfolio() {
     queryKey: ['portfolio'],
     queryFn: getPortfolio,
     select: (portfolio) =>
+      // ARS es excluido ya que, deacuerdo al endpoint de instruentos, ARS no es del type "ACCIONES"
       portfolio.filter((portfolio) => portfolio.ticker !== 'ARS').map(withProfit),
   });
 }

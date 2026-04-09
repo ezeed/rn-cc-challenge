@@ -13,7 +13,7 @@ type Props = {
 
 export function InstrumentsList({ instruments, isLoading, error, onRetry }: Props) {
   if (isLoading) {
-    return <ActivityIndicator size="large" />;
+    return <ActivityIndicator size="large" accessibilityLabel="Cargando instrumentos..." />;
   }
 
   if (error) {

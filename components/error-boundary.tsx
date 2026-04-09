@@ -57,7 +57,7 @@ function DefaultErrorFallback({ onRetry }: { onRetry: () => void }) {
       <UIText color="muted" textAlign="center" style={styles.message}>
         Por favor, vuelve a intentar mas tarde.
       </UIText>
-      <UIPressable variant="secondary" onPress={onRetry} text="Reintentar" />
+      <UIPressable variant="primary" onPress={onRetry} text="Reintentar" />
     </UIView>
   );
 }

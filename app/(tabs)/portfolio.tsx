@@ -33,55 +33,6 @@ export default function PortfolioScreen() {
             onChangeText={handleSearch}
           />
         </UIView>
-        {/* TODO: Implementar sort */}
-        {/* <UIView style={styles.sortRow}>
-          <UIPressable
-            size="sm"
-            appearance="outline"
-            active={sortBy === 'ticker'}
-            onPress={() => handleSortPress('ticker')}
-          >
-            <ChipLabel
-              label="Ticker"
-              value="ticker"
-              sortBy={sortBy}
-              arrow={getSortArrow('ticker') ?? ''}
-            />
-          </UIPressable>
-          <UIPressable
-            size="sm"
-            appearance="outline"
-            active={sortBy === 'price'}
-            onPress={() => handleSortPress('price')}
-          >
-            <ChipLabel
-              label="Precio"
-              value="price"
-              sortBy={sortBy}
-              arrow={getSortArrow('price') ?? ''}
-            />
-          </UIPressable>
-          <UIPressable
-            size="sm"
-            appearance="outline"
-            active={sortBy === 'profit'}
-            onPress={() => handleSortPress('profit')}
-          >
-            <ChipLabel
-              label="Retorno"
-              value="profit"
-              sortBy={sortBy}
-              arrow={getSortArrow('profit') ?? ''}
-            />
-          </UIPressable>
-          <UIPressable
-            disabled={sortBy === null}
-            size="sm"
-            appearance="outline"
-            text="Reset"
-            onPress={handleResetSort}
-          />
-        </UIView> */}
         <PortfolioList
           portfolio={filteredPortfolio ?? []}
           isLoading={isLoading}

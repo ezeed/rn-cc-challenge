@@ -38,6 +38,7 @@ export default function InstrumentsScreen() {
               appearance="outline"
               active={sortBy === 'ticker'}
               onPress={() => handleSortPress('ticker')}
+              accessibilityLabel="Ordenar por ticker"
             >
               <ChipLabel
                 label="Ticker"
@@ -51,6 +52,7 @@ export default function InstrumentsScreen() {
               appearance="outline"
               active={sortBy === 'price'}
               onPress={() => handleSortPress('price')}
+              accessibilityLabel="Ordenar por precio"
             >
               <ChipLabel
                 label="Precio"
@@ -64,6 +66,7 @@ export default function InstrumentsScreen() {
               appearance="outline"
               active={sortBy === 'profit'}
               onPress={() => handleSortPress('profit')}
+              accessibilityLabel="Ordenar por retorno"
             >
               <ChipLabel
                 label="Retorno"
@@ -77,6 +80,7 @@ export default function InstrumentsScreen() {
               size="sm"
               appearance="outline"
               onPress={handleResetSort}
+              accessibilityLabel="Quitar ordenamiento"
             >
               <Feather name="x" size={18} color={colors.text} />
             </UIPressable>

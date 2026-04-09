@@ -31,6 +31,7 @@ export function OrderInstrumentSummary({ instrument }: Props) {
           onPress={() => router.back()}
           size="sm"
           style={styles.closeButton}
+          accessibilityLabel="Cerrar"
         >
           <Feather color={colors.text} name="x" size={16} />
         </UIPressable>

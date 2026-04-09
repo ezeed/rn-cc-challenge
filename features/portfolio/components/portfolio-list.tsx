@@ -13,7 +13,7 @@ type Props = {
 
 export function PortfolioList({ portfolio, isLoading, error, onRetry }: Props) {
   if (isLoading) {
-    return <ActivityIndicator size="large" />;
+    return <ActivityIndicator size="large" accessibilityLabel="Cargando portfolio..." />;
   }
 
   if (error) {
