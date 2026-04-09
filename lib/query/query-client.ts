@@ -1,5 +1,6 @@
-import { QueryClient } from '@tanstack/react-query';
+import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 import { AppError } from '@/lib/errors/api-errors';
+import { monitoring } from '@/lib/monitoring/monitoring';
 
 const MAX_RETRIES = 2;
 
@@ -18,4 +19,10 @@ export const queryClient = new QueryClient({
       retry: 0,
     },
   },
+  queryCache: new QueryCache({
+    onError: (error) => monitoring.captureException(error),
+  }),
+  mutationCache: new MutationCache({
+    onError: (error) => monitoring.captureException(error),
+  }),
 });
