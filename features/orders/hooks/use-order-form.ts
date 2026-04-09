@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Keyboard } from 'react-native';
 import { getErrorMessage } from '@/lib/errors/api-errors';
 import { useOrders } from './use-orders';
-import { sanitizeDecimalInput, sanitizeIntegerInput } from '../lib/sanitize-numeric-input';
+import { sanitizeDecimalInput, sanitizeIntegerInput } from '@/lib/sanitize-numeric-input';
 import { OrderQuantityMode, OrderSide, OrderSubmissionViewState, OrderType } from '../types';
 
 type FormState = {

@@ -13,6 +13,7 @@ export function InstrumentItem({ item }: { item: InstrumentProfit }) {
   const logo = item.ticker.toUpperCase();
   return (
     <Pressable
+      accessibilityLabel={`${item.ticker} - ${item.name}`}
       onPress={() =>
         router.push({
           pathname: '/order',
