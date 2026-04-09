@@ -17,7 +17,7 @@ function withProfit(accum: InstrumentProfit[], instrument: Instrument): Instrume
 export function useInstruments(ticker: string) {
   return useQuery({
     queryKey: ['instruments', ticker],
-    queryFn: () => (ticker ? getInstrumentsByTicker(ticker) : getInstruments()),
+    queryFn: () => (ticker ? getInstrumentsByTicker(ticker.toUpperCase()) : getInstruments()),
     select: (instruments) => instruments.reduce(withProfit, [] as InstrumentProfit[]),
   });
 }

@@ -17,7 +17,7 @@ export default function InstrumentsScreen() {
     useInstrumentSort(instruments ?? []);
 
   const handleSearch = (text: string) => {
-    setSearch(text.toUpperCase());
+    setSearch(text);
   };
 
   return (
@@ -29,6 +29,8 @@ export default function InstrumentsScreen() {
             icon="search"
             value={search}
             clearable
+            autoCapitalize="characters"
+            autoCorrect={false}
             onChangeText={handleSearch}
           />
 

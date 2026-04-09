@@ -18,7 +18,7 @@ export default function PortfolioScreen() {
   }, [portfolio, search]);
 
   const handleSearch = (text: string) => {
-    setSearch(text.toUpperCase());
+    setSearch(text);
   };
 
   return (
@@ -30,6 +30,8 @@ export default function PortfolioScreen() {
             icon="search"
             value={search}
             clearable
+            autoCapitalize="characters"
+            autoCorrect={false}
             onChangeText={handleSearch}
           />
         </UIView>

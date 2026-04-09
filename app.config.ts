@@ -22,7 +22,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     'expo-router',
-    '@sentry/react-native',
+    ...(process.env.EXPO_PUBLIC_SENTRY_DSN?.trim() ? ['@sentry/react-native' as const] : []),
     [
       'expo-splash-screen',
       {

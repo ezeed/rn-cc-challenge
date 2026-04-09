@@ -1,10 +1,10 @@
 import * as Sentry from '@sentry/react-native';
 import type { ComponentType } from 'react';
 
-const DSN = process.env.EXPO_PUBLIC_SENTRY_DSN;
+const DSN = process.env.EXPO_PUBLIC_SENTRY_DSN?.trim() || undefined;
 const IS_DEV = __DEV__;
 const ALLOW_DEV_SENTRY = process.env.EXPO_PUBLIC_SENTRY_DEV === 'true';
-const SHOULD_SEND = !IS_DEV || ALLOW_DEV_SENTRY;
+const SHOULD_SEND = Boolean(DSN) && (!IS_DEV || ALLOW_DEV_SENTRY);
 
 function wrapComponent<T extends ComponentType<any>>(Component: T): T {
   if (!SHOULD_SEND) {
@@ -16,10 +16,10 @@ function wrapComponent<T extends ComponentType<any>>(Component: T): T {
 
 export const monitoring = {
   init(): void {
-    if (!DSN || !SHOULD_SEND) return;
+    if (!SHOULD_SEND) return;
 
     Sentry.init({
-      dsn: DSN,
+      dsn: DSN!,
       debug: IS_DEV,
       enabled: true,
       environment: IS_DEV ? 'development' : 'production',
