@@ -59,7 +59,7 @@ EXPO_PUBLIC_SENTRY_DSN= # optional — leave blank to disable error monitoring
 ### Build de la app
 
 **Android APK:**
-- [Download APK](https://expo.dev/accounts/ezeed/projects/rn-cc-challenge/builds/2781748c-4c58-4879-9260-c1cd845df432)
+- [Download APK](https://expo.dev/accounts/ezeed/projects/rn-cc-challenge/builds/f8487e40-099d-431f-99ed-50a5b03213a2)
 
 Crear un nuevo build:
 
@@ -171,10 +171,10 @@ Los errores de crash de la app son manejados por `ErrorBoundary` y también emit
 
 ## Evidencia
 
-### iOS 
+### iOS
 
-https://github.com/user-attachments/assets/24dc470a-1667-4493-bd18-ee304250dff2
+https://github.com/user-attachments/assets/24dc470a-1667-4493-bd18-ee304250dff2 
 
-### Android 
+ ### Android
 
 https://github.com/user-attachments/assets/b4233136-3f99-4a1a-bb1c-3d38506ef81e
