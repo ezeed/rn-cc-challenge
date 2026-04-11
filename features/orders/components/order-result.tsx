@@ -1,3 +1,4 @@
+import { UIAnimatedView } from '@/components/ui/ui-animated-view';
 import { UIPressable } from '@/components/ui/ui-pressable';
 import { UIText } from '@/components/ui/ui-text';
 import { UIView } from '@/components/ui/ui-view';
@@ -19,20 +20,20 @@ export function OrderResult({ submissionState, handleReset }: Props) {
         style={[styles.card, { backgroundColor: colors.background, borderColor: colors.border }]}
       >
         {submissionState.kind === 'pending' && (
-          <>
+          <UIAnimatedView key="pending" preset="fadeDown" style={styles.cardContent}>
             <ActivityIndicator color={colors.primary} />
             <UIText variant="title">Enviando orden</UIText>
             <UIText color="muted">Estamos procesando tu orden.</UIText>
-          </>
+          </UIAnimatedView>
         )}
         {submissionState.kind === 'error' && (
-          <>
+          <UIAnimatedView key="error" preset="fadeDown" style={styles.cardContent}>
             <UIText variant="title">No se pudo enviar la orden</UIText>
             <UIText color="danger">{submissionState.message}</UIText>
-          </>
+          </UIAnimatedView>
         )}
         {submissionState.kind === 'success' && (
-          <>
+          <UIAnimatedView key="success" preset="fadeDown" style={styles.cardContent}>
             <UIText variant="title">Resultado de la orden</UIText>
             <UIText>{`Id de orden: ${submissionState.result.id}`}</UIText>
             <UIText
@@ -44,7 +45,7 @@ export function OrderResult({ submissionState, handleReset }: Props) {
                     : 'secondary'
               }
             >{`Estado: ${submissionState.result.status}`}</UIText>
-          </>
+          </UIAnimatedView>
         )}
       </UIView>
 
@@ -71,8 +72,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 16,
     borderWidth: 1,
-    gap: 8,
     padding: 16,
+  },
+  cardContent: {
+    alignItems: 'center',
+    gap: 8,
+    width: '100%',
   },
   container: {
     gap: 20,
