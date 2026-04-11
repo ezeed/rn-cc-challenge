@@ -29,6 +29,7 @@ function RootNavigator() {
                   headerShown: false,
                   presentation: Platform.OS === 'ios' ? 'formSheet' : 'modal',
                   gestureEnabled: true,
+                  animation: Platform.OS === 'android' ? 'slide_from_bottom' : 'default',
                 }}
               />
             </Stack>

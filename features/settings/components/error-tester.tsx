@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { UIAnimatedView } from '@/components/ui/ui-animated-view';
 import { UIPressable } from '@/components/ui/ui-pressable';
 import { UIText } from '@/components/ui/ui-text';
 import { UIView } from '@/components/ui/ui-view';
@@ -42,11 +43,11 @@ function ErrorTester() {
   };
 
   return (
-    <UIView style={styles.container}>
+    <UIAnimatedView layoutAnimation preset="fadeDown" style={styles.container}>
       <UIText style={styles.sectionTitle}>Pruebas de errores</UIText>
       <UIText color="muted">Botones para validar mensajes de error.</UIText>
 
-      <UIView style={styles.actionsGrid}>
+      <UIAnimatedView layoutAnimation style={styles.actionsGrid}>
         <UIPressable
           style={styles.gridButton}
           text="404"
@@ -73,7 +74,7 @@ function ErrorTester() {
           text="error manual"
           onPress={() => handleError('manual', new Error('Dev manual error'))}
         />
-      </UIView>
+      </UIAnimatedView>
 
       <UIView style={styles.actionsFooter}>
         <UIPressable
@@ -88,8 +89,10 @@ function ErrorTester() {
       </UIView>
 
       {result ? (
-        <UIView
+        <UIAnimatedView
           background="surface"
+          layoutAnimation
+          preset="fadeDown"
           style={[
             styles.resultCard,
             {
@@ -104,9 +107,9 @@ function ErrorTester() {
             onPress={() => setResult(null)}
             text="Limpiar resultado"
           />
-        </UIView>
+        </UIAnimatedView>
       ) : null}
-    </UIView>
+    </UIAnimatedView>
   );
 }
 

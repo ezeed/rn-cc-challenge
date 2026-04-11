@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
+import { UIAnimatedView } from '@/components/ui/ui-animated-view';
 import { UIPressable } from '@/components/ui/ui-pressable';
 import { UIText } from '@/components/ui/ui-text';
-import { UIView } from '@/components/ui/ui-view';
 import { ThemeMode, useTheme } from '@/lib/theme/theme-provider';
 
 function ThemeSelector() {
@@ -9,12 +9,12 @@ function ThemeSelector() {
   const themeOptions: ThemeMode[] = ['system', 'light', 'dark'];
 
   return (
-    <UIView style={styles.container}>
+    <UIAnimatedView layoutAnimation preset="fadeDown" style={styles.container}>
       <UIText variant="title" style={styles.pageTitle}>
         Configuracion
       </UIText>
       <UIText style={styles.sectionTitle}>Tema</UIText>
-      <UIView style={styles.options}>
+      <UIAnimatedView layoutAnimation style={styles.options}>
         {themeOptions.map((option) => {
           const isSelected = mode === option;
 
@@ -35,8 +35,8 @@ function ThemeSelector() {
             />
           );
         })}
-      </UIView>
-    </UIView>
+      </UIAnimatedView>
+    </UIAnimatedView>
   );
 }
 

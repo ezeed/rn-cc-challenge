@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { usePortfolio, PortfolioList } from '@/features/portfolio';
+import { UIAnimatedView } from '@/components/ui/ui-animated-view';
 import { UISafeArea } from '@/components/ui/ui-safe-area';
 import { UIView } from '@/components/ui/ui-view';
 import { useMemo, useState } from 'react';
@@ -23,7 +24,7 @@ export default function PortfolioScreen() {
 
   return (
     <UISafeArea>
-      <UIView style={styles.container}>
+      <UIAnimatedView preset="fadeDown" style={styles.container}>
         <UIView style={styles.searchRow}>
           <UIInput
             placeholder="Buscar Instrumentos"
@@ -41,7 +42,7 @@ export default function PortfolioScreen() {
           error={error}
           onRetry={refetch}
         />
-      </UIView>
+      </UIAnimatedView>
     </UISafeArea>
   );
 }

@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { useInstruments, InstrumentsList, useInstrumentSort } from '@/features/instruments';
+import { UIAnimatedView } from '@/components/ui/ui-animated-view';
 import { UISafeArea } from '@/components/ui/ui-safe-area';
 import { UIInput } from '@/components/ui/ui-input';
 import { UIView } from '@/components/ui/ui-view';
@@ -22,7 +23,7 @@ export default function InstrumentsScreen() {
 
   return (
     <UISafeArea>
-      <UIView style={styles.container}>
+      <UIAnimatedView preset="fadeDown" style={styles.container}>
         <UIView style={styles.searchRow}>
           <UIInput
             placeholder="Buscar Instrumentos"
@@ -94,7 +95,7 @@ export default function InstrumentsScreen() {
           error={error}
           onRetry={refetch}
         />
-      </UIView>
+      </UIAnimatedView>
     </UISafeArea>
   );
 }

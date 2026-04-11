@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { router } from 'expo-router';
+import { UIAnimatedView } from '@/components/ui/ui-animated-view';
 import { UIInput } from '@/components/ui/ui-input';
 import { UIPressable } from '@/components/ui/ui-pressable';
 import { UIText } from '@/components/ui/ui-text';
@@ -56,7 +57,11 @@ export function OrderFlow({ instrument }: Props) {
   const { side, type, quantityMode, shares, amount, limitPrice } = form;
 
   if (submissionState) {
-    return <OrderResult submissionState={submissionState} handleReset={handleReset} />;
+    return (
+      <UIAnimatedView preset="fadeDown" style={styles.container}>
+        <OrderResult submissionState={submissionState} handleReset={handleReset} />
+      </UIAnimatedView>
+    );
   }
 
   const quantityModeOptions = QUANTITY_MODE_OPTIONS.map((opt) => ({
@@ -67,7 +72,7 @@ export function OrderFlow({ instrument }: Props) {
   const parsedAmount = Number(amount);
 
   return (
-    <UIView style={styles.container}>
+    <UIAnimatedView preset="fadeDown" style={styles.container}>
       <UIView style={styles.row}>
         <UIText>Operación</UIText>
         <UIToggleGroup compact options={SIDE_OPTIONS} value={side} onChange={handleSideChange} />
@@ -110,7 +115,7 @@ export function OrderFlow({ instrument }: Props) {
       </UIView>
 
       {type === 'LIMIT' && (
-        <UIView style={styles.section}>
+        <UIAnimatedView preset="fadeDown" style={styles.section}>
           <UIText>
             Precio limite en ARS <UIText color="muted">(requerido)</UIText>
           </UIText>
@@ -121,7 +126,7 @@ export function OrderFlow({ instrument }: Props) {
             placeholder="Ej. 84.5"
             value={limitPrice}
           />
-        </UIView>
+        </UIAnimatedView>
       )}
 
       <UIView style={styles.row}>
@@ -142,7 +147,7 @@ export function OrderFlow({ instrument }: Props) {
           text={side === 'BUY' ? 'Enviar compra' : 'Enviar venta'}
         />
       </UIView>
-    </UIView>
+    </UIAnimatedView>
   );
 }
 
