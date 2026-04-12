@@ -1,12 +1,17 @@
 import { StyleSheet } from 'react-native';
 import { UIAnimatedView } from '@/components/ui/ui-animated-view';
-import { UIPressable } from '@/components/ui/ui-pressable';
 import { UIText } from '@/components/ui/ui-text';
+import { UIToggleGroup } from '@/components/ui/ui-toggle-group';
 import { ThemeMode, useTheme } from '@/lib/theme/theme-provider';
 
+const THEME_OPTIONS: { label: string; value: ThemeMode }[] = [
+  { label: 'Sistema', value: 'system' },
+  { label: 'Claro', value: 'light' },
+  { label: 'Oscuro', value: 'dark' },
+];
+
 function ThemeSelector() {
-  const { colors, mode, setMode } = useTheme();
-  const themeOptions: ThemeMode[] = ['system', 'light', 'dark'];
+  const { mode, setMode } = useTheme();
 
   return (
     <UIAnimatedView layoutAnimation preset="fadeDown" style={styles.container}>
@@ -14,28 +19,7 @@ function ThemeSelector() {
         Configuracion
       </UIText>
       <UIText style={styles.sectionTitle}>Tema</UIText>
-      <UIAnimatedView layoutAnimation style={styles.options}>
-        {themeOptions.map((option) => {
-          const isSelected = mode === option;
-
-          return (
-            <UIPressable
-              key={option}
-              variant={isSelected ? 'primary' : 'secondary'}
-              style={[
-                styles.button,
-                {
-                  backgroundColor: isSelected ? colors.primary : colors.surface,
-                  borderColor: isSelected ? colors.primary : colors.border,
-                },
-              ]}
-              textColor={isSelected ? 'white' : 'default'}
-              text={option === 'system' ? 'Sistema' : option === 'light' ? 'Claro' : 'Oscuro'}
-              onPress={() => setMode(option)}
-            />
-          );
-        })}
-      </UIAnimatedView>
+      <UIToggleGroup options={THEME_OPTIONS} value={mode} onChange={setMode} />
     </UIAnimatedView>
   );
 }
@@ -52,15 +36,5 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-  },
-  options: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    width: '31%',
-    minWidth: 0,
-    borderWidth: 1,
   },
 });

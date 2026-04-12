@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import { UIAnimatedView } from '@/components/ui/ui-animated-view';
 import { UIPressable } from '@/components/ui/ui-pressable';
 import { UIText } from '@/components/ui/ui-text';
@@ -51,21 +51,21 @@ function ErrorTester() {
         <UIPressable
           style={styles.gridButton}
           text="404"
-          loading={isPending}
+          disabled={isPending}
           onPressIn={() => handleErrorTrigger('404')}
         />
 
         <UIPressable
           style={styles.gridButton}
           text="500"
-          loading={isPending}
+          disabled={isPending}
           onPressIn={() => handleErrorTrigger('500')}
         />
 
         <UIPressable
           style={styles.gridButton}
           text="401-Auth"
-          loading={isPending}
+          disabled={isPending}
           onPressIn={() => handleErrorTrigger('401')}
         />
 
@@ -88,27 +88,28 @@ function ErrorTester() {
         />
       </UIView>
 
-      {result ? (
+      {(isPending || result) && (
         <UIAnimatedView
           background="surface"
           layoutAnimation
           preset="fadeDown"
-          style={[
-            styles.resultCard,
-            {
-              borderColor: colors.border,
-            },
-          ]}
+          style={[styles.resultCard, { borderColor: colors.border }]}
         >
-          <UIText style={styles.resultTitle}>Resultado: {result.title}</UIText>
-          <UIText color="muted">{result.message}</UIText>
-          <UIPressable
-            appearance="outline"
-            onPress={() => setResult(null)}
-            text="Limpiar resultado"
-          />
+          {isPending ? (
+            <ActivityIndicator color={colors.primary} />
+          ) : (
+            <UIView style={{ gap: 24 }}>
+              <UIText style={styles.resultTitle}>Resultado: {result!.title}</UIText>
+              <UIText color="muted">{result!.message}</UIText>
+              <UIPressable
+                appearance="outline"
+                onPress={() => setResult(null)}
+                text="Limpiar resultado"
+              />
+            </UIView>
+          )}
         </UIAnimatedView>
-      ) : null}
+      )}
     </UIAnimatedView>
   );
 }
@@ -144,7 +145,6 @@ const styles = StyleSheet.create({
     width: '48%',
   },
   resultCard: {
-    width: '100%',
     marginTop: 8,
     borderWidth: 1,
     borderRadius: 16,

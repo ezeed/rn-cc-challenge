@@ -1,15 +1,25 @@
+import { Feather } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
+import { router } from 'expo-router';
 import { UIView } from '@/components/ui/ui-view';
 import { UIText } from '@/components/ui/ui-text';
 import { UIPressable } from '@/components/ui/ui-pressable';
+import { useTheme } from '@/lib/theme/theme-provider';
 
-export function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+type Props = {
+  message: string;
+  onRetry?: () => void;
+};
+
+export function ErrorState({ message, onRetry }: Props) {
+  const { colors } = useTheme();
   return (
     <UIView style={styles.container}>
-      <UIText variant="title" style={{ marginBottom: 8 }}>
+      <Feather name="alert-circle" size={64} color={colors.danger} />
+      <UIText variant="title" textAlign="center">
         {message}
       </UIText>
-      <UIPressable variant="danger" onPress={onRetry} text="Reintentar" />
+      <UIPressable variant="danger" onPress={onRetry ?? router.back} text="Reintentar" />
     </UIView>
   );
 }

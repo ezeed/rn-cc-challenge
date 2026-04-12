@@ -57,9 +57,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     gap: 20,
   },
-  sortRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
 });

@@ -10,6 +10,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { useTheme } from '@/lib/theme/theme-provider';
+import { UIText } from './ui-text';
 import { UIView } from './ui-view';
 
 type UIInputIconName = ComponentProps<typeof Feather>['name'];
@@ -17,6 +18,7 @@ type UIInputIconName = ComponentProps<typeof Feather>['name'];
 type Props = TextInputProps & {
   icon?: UIInputIconName;
   clearable?: boolean;
+  error?: string;
   containerStyle?: StyleProp<ViewStyle>;
   inputStyle?: StyleProp<TextStyle>;
 };
@@ -25,6 +27,7 @@ export function UIInput({
   clearable = false,
   defaultValue,
   icon,
+  error,
   containerStyle,
   inputStyle,
   onBlur,
@@ -43,74 +46,84 @@ export function UIInput({
   const currentValue = typeof value === 'string' ? value : internalValue;
   const showClearButton = clearable && currentValue.length > 0;
 
-  const borderColor = isFocused ? colors.primary : colors.border;
+  const borderColor = error ? colors.danger : isFocused ? colors.primary : colors.border;
   const iconColor = isFocused ? colors.primary : colors.textMuted;
 
   return (
-    <UIView
-      style={[
-        styles.container,
-        {
-          borderColor,
-        },
-        containerStyle,
-      ]}
-    >
-      {icon ? <Feather name={icon} size={18} color={iconColor} /> : null}
-      <TextInput
-        {...props}
-        ref={inputRef}
-        defaultValue={defaultValue}
-        placeholderTextColor={placeholderTextColor ?? colors.textMuted}
-        selectionColor={selectionColor ?? colors.primary}
-        value={value}
-        onFocus={(event) => {
-          setIsFocused(true);
-          onFocus?.(event);
-        }}
-        onBlur={(event) => {
-          setIsFocused(false);
-          onBlur?.(event);
-        }}
-        onChangeText={(nextValue) => {
-          if (typeof value !== 'string') {
-            setInternalValue(nextValue);
-          }
-          onChangeText?.(nextValue);
-        }}
+    <UIView style={styles.wrapper}>
+      <UIView
         style={[
-          styles.input,
+          styles.container,
           {
-            color: colors.text,
-            fontFamily: typography.fontFamily.sans,
-            fontSize: typography.fontSize.md,
-            fontWeight: typography.fontWeight.regular,
+            borderColor,
           },
-          style,
-          inputStyle,
+          containerStyle,
         ]}
-      />
-      {showClearButton ? (
-        <Pressable
-          accessibilityLabel="Clear input"
-          hitSlop={8}
-          onPress={() => {
-            if (typeof value !== 'string') {
-              inputRef.current?.clear();
-              setInternalValue('');
-            }
-            onChangeText?.('');
+      >
+        {icon && <Feather name={icon} size={18} color={iconColor} />}
+        <TextInput
+          {...props}
+          ref={inputRef}
+          defaultValue={defaultValue}
+          placeholderTextColor={placeholderTextColor ?? colors.textMuted}
+          selectionColor={selectionColor ?? colors.primary}
+          value={value}
+          onFocus={(event) => {
+            setIsFocused(true);
+            onFocus?.(event);
           }}
-          style={({ pressed }) => [styles.clearButton, { opacity: pressed ? 0.7 : 1 }]}
-        >
-          <Feather name="x-circle" size={18} color={iconColor} />
-        </Pressable>
-      ) : null}
+          onBlur={(event) => {
+            setIsFocused(false);
+            onBlur?.(event);
+          }}
+          onChangeText={(nextValue) => {
+            if (typeof value !== 'string') {
+              setInternalValue(nextValue);
+            }
+            onChangeText?.(nextValue);
+          }}
+          style={[
+            styles.input,
+            {
+              color: colors.text,
+              fontFamily: typography.fontFamily.sans,
+              fontSize: typography.fontSize.md,
+              fontWeight: typography.fontWeight.regular,
+            },
+            style,
+            inputStyle,
+          ]}
+        />
+        {showClearButton && (
+          <Pressable
+            accessibilityLabel="Clear input"
+            hitSlop={8}
+            onPress={() => {
+              if (typeof value !== 'string') {
+                inputRef.current?.clear();
+                setInternalValue('');
+              }
+              onChangeText?.('');
+            }}
+            style={({ pressed }) => [styles.clearButton, { opacity: pressed ? 0.7 : 1 }]}
+          >
+            <Feather name="x-circle" size={18} color={iconColor} />
+          </Pressable>
+        )}
+      </UIView>
+      {error && (
+        <UIText color="danger" style={styles.errorText}>
+          {error}
+        </UIText>
+      )}
     </UIView>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    gap: 6,
+  },
   container: {
     alignItems: 'center',
     borderRadius: 12,
@@ -129,5 +142,8 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     paddingVertical: 12,
+  },
+  errorText: {
+    fontSize: 13,
   },
 });

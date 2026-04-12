@@ -93,7 +93,4 @@ const styles = StyleSheet.create({
     gap: 12,
     justifyContent: 'space-between',
   },
-  section: {
-    gap: 8,
-  },
 });

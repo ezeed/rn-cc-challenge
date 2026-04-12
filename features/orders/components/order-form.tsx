@@ -1,4 +1,5 @@
-import { StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { Keyboard, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { UIAnimatedView } from '@/components/ui/ui-animated-view';
 import { UIInput } from '@/components/ui/ui-input';
@@ -9,15 +10,18 @@ import { UIView } from '@/components/ui/ui-view';
 import { useTheme } from '@/lib/theme/theme-provider';
 import { formatPeso } from '@/lib/format-peso';
 import { useOrderForm } from '../hooks/use-order-form';
+import { useOrderSubmission } from '../hooks/use-order-submission';
 import { OrderQuantityMode, OrderSide, OrderType } from '../types';
+import { buildCreateOrderBody, calculateEstimatedShares } from '../utils/order-calculations';
+import { isOrderFormValid, validateOrderForm } from '../utils/order-validation';
 import { OrderResult } from './order-result';
 
 type Props = {
   instrument: {
-    id?: string;
-    ticker?: string;
-    name?: string;
-    price?: string;
+    id: string;
+    ticker: string;
+    name: string;
+    price: string;
   };
 };
 
@@ -36,25 +40,28 @@ const QUANTITY_MODE_OPTIONS: { label: string; value: OrderQuantityMode }[] = [
   { label: 'Monto', value: 'AMOUNT' },
 ];
 
-export function OrderFlow({ instrument }: Props) {
+export function OrderForm({ instrument }: Props) {
   const { colors } = useTheme();
   const {
     form,
-    estimatedShares,
-    isSubmitDisabled,
-    isSubmitting,
-    submissionState,
     handleSideChange,
     handleTypeChange,
     handleQuantityModeChange,
     handleSharesChange,
     handleAmountChange,
     handleLimitPriceChange,
-    handleSubmit,
-    handleReset,
-  } = useOrderForm({ instrumentId: instrument.id, lastPrice: instrument.price });
+    resetForm,
+  } = useOrderForm();
+  const { submissionState, submitOrder, isSubmitting, resetSubmission } = useOrderSubmission();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const { side, type, quantityMode, shares, amount, limitPrice } = form;
+
+  const handleReset = () => {
+    resetForm();
+    resetSubmission();
+    setIsSubmitted(false);
+  };
 
   if (submissionState) {
     return (
@@ -64,12 +71,28 @@ export function OrderFlow({ instrument }: Props) {
     );
   }
 
+  const price = Number(instrument.price);
+  const estimatedShares = calculateEstimatedShares(Number(amount), price);
+  const errors = validateOrderForm(form, price);
+  const visibleErrors = isSubmitted ? errors : {};
+
+  const handleSubmit = () => {
+    if (!isOrderFormValid(errors)) {
+      setIsSubmitted(true);
+      return;
+    }
+    // ScrollView usa keyboardShouldPersistTaps="handled" y no triggerea el
+    // auto-blur del input con foco. El dismiss de teclado es forzado para no tapar
+    // la pantalla de resultado/pendiente al hacer submit.
+    Keyboard.dismiss();
+    const input = buildCreateOrderBody(form, instrument.id, estimatedShares);
+    submitOrder(input);
+  };
+
   const quantityModeOptions = QUANTITY_MODE_OPTIONS.map((opt) => ({
     ...opt,
     disabled: type === 'LIMIT' && opt.value === 'AMOUNT',
   }));
-
-  const parsedAmount = Number(amount);
 
   return (
     <UIAnimatedView preset="fadeDown" style={styles.container}>
@@ -93,26 +116,45 @@ export function OrderFlow({ instrument }: Props) {
         />
       </UIView>
 
-      <UIView style={styles.section}>
-        <UIText>
-          {quantityMode === 'SHARES' ? 'Cantidad de acciones' : 'Monto en ARS'}
-          <UIText color="muted"> (requerido)</UIText>
-        </UIText>
-        <UIInput
-          keyboardType="numeric"
-          icon={quantityMode === 'AMOUNT' ? 'dollar-sign' : undefined}
-          onChangeText={quantityMode === 'SHARES' ? handleSharesChange : handleAmountChange}
-          placeholder={quantityMode === 'SHARES' ? 'Ej. 10' : 'Ej. 25000'}
-          value={quantityMode === 'SHARES' ? shares : amount}
-        />
-        {quantityMode === 'AMOUNT' && estimatedShares !== null && (
-          <UIText color="muted">
-            {estimatedShares > 0
-              ? `${formatPeso(parsedAmount)} te permite ${side === 'BUY' ? 'comprar' : 'vender'} hasta ${estimatedShares} acciones.`
-              : 'El monto ingresado no alcanza para una accion entera.'}
+      {quantityMode === 'SHARES' && (
+        <UIView style={styles.section}>
+          <UIText>
+            Cantidad de acciones
+            <UIText color="muted"> (requerido)</UIText>
           </UIText>
-        )}
-      </UIView>
+          <UIInput
+            keyboardType="numeric"
+            onChangeText={handleSharesChange}
+            placeholder="Ej. 10"
+            value={shares}
+            error={visibleErrors.shares}
+          />
+        </UIView>
+      )}
+
+      {quantityMode === 'AMOUNT' && (
+        <UIView style={styles.section}>
+          <UIText>
+            Monto en ARS
+            <UIText color="muted"> (requerido)</UIText>
+          </UIText>
+          <UIInput
+            icon="dollar-sign"
+            keyboardType="numeric"
+            onChangeText={handleAmountChange}
+            placeholder="Ej. 25000"
+            value={amount}
+            error={visibleErrors.amount}
+          />
+          {estimatedShares !== null && (
+            <UIText color="muted">
+              {estimatedShares > 0
+                ? `${formatPeso(Number(amount))} te permite ${side === 'BUY' ? 'comprar' : 'vender'} hasta ${estimatedShares} acciones.`
+                : 'El monto ingresado no alcanza para una accion entera.'}
+            </UIText>
+          )}
+        </UIView>
+      )}
 
       {type === 'LIMIT' && (
         <UIAnimatedView preset="fadeDown" style={styles.section}>
@@ -125,6 +167,7 @@ export function OrderFlow({ instrument }: Props) {
             onChangeText={handleLimitPriceChange}
             placeholder="Ej. 84.5"
             value={limitPrice}
+            error={visibleErrors.limitPrice}
           />
         </UIAnimatedView>
       )}
@@ -137,7 +180,7 @@ export function OrderFlow({ instrument }: Props) {
           text="Cancelar"
         />
         <UIPressable
-          disabled={isSubmitDisabled}
+          disabled={isSubmitting}
           loading={isSubmitting}
           onPress={handleSubmit}
           style={[
