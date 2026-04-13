@@ -171,10 +171,4 @@ Los errores de crash de la app son manejados por `ErrorBoundary` y también emit
 
 ## Evidencia
 
-### iOS
-
-https://github.com/user-attachments/assets/24dc470a-1667-4493-bd18-ee304250dff2 
-
- ### Android
-
-https://github.com/user-attachments/assets/b4233136-3f99-4a1a-bb1c-3d38506ef81e
+https://github.com/user-attachments/assets/f96954d3-bcd5-4f4a-b53c-dad962aba1e6
