@@ -4,14 +4,14 @@ import { Portfolio, PortfolioProfit } from '../types';
 import { getProfit } from '@/lib/get-profit';
 
 function withProfit(portfolio: Portfolio): PortfolioProfit {
-  const returnPercentage = getProfit(portfolio.last_price, portfolio.avg_cost_price);
+  const totalReturn = getProfit(portfolio.last_price, portfolio.avg_cost_price);
   const totalValue = portfolio.quantity * portfolio.last_price;
   const totalCost = portfolio.quantity * portfolio.avg_cost_price;
-  const totalReturn = totalValue - totalCost;
+  const gain = totalValue - totalCost;
   return {
     ...portfolio,
     total_value: totalValue,
-    profit: returnPercentage,
+    gain,
     total_return: totalReturn,
   };
 }

@@ -1,19 +1,19 @@
+import { StyleSheet } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { UIText } from '@/components/ui/ui-text';
 import { UIView } from '@/components/ui/ui-view';
 import { useTheme } from '@/lib/theme/theme-provider';
-import { MaterialIcons } from '@expo/vector-icons';
-import { StyleSheet } from 'react-native';
-import { InstrumentSortBy } from '../types';
 
 type Props = {
   label: string;
-  value: InstrumentSortBy;
-  sortBy: InstrumentSortBy | null;
+  value: string;
+  sortBy: string | null;
   arrow: string;
 };
 
-export function ChipLabel({ label, value, sortBy, arrow }: Props) {
+export function UIChipLabel({ label, value, sortBy, arrow }: Props) {
   const { colors } = useTheme();
+
   if (sortBy === value) {
     return (
       <UIView style={styles.chipContent}>
@@ -35,6 +35,6 @@ const styles = StyleSheet.create({
   chipContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 5,
   },
 });

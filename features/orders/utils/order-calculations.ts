@@ -18,14 +18,14 @@ export function changeOrderType(form: OrderFormValues, nextType: OrderType): Ord
 
 export function buildCreateOrderBody(
   form: OrderFormValues,
-  instrumentId: string,
+  instrumentId: number,
   estimatedShares: number | null,
 ): CreateOrderInput {
   const quantity =
-    form.quantityMode === 'SHARES' ? parseInt(form.shares, 10) : (estimatedShares ?? 0);
+    form.quantityMode === 'SHARES' ? Number(form.shares) : (estimatedShares ?? 0);
 
   return {
-    instrument_id: parseInt(instrumentId, 10),
+    instrument_id: instrumentId,
     side: form.side,
     type: form.type,
     quantity,

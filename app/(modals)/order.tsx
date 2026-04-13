@@ -17,6 +17,8 @@ export default function OrderModalScreen() {
     return <ErrorState message="No se encontró el instrumento seleccionado." />;
   }
 
+  const instrumentId = Number(id);
+
   return (
     <UISafeArea>
       <ScrollView
@@ -26,7 +28,7 @@ export default function OrderModalScreen() {
         showsVerticalScrollIndicator={false}
       >
         <OrderInstrumentSummary instrument={{ ticker, name, price }} />
-        <OrderForm instrument={{ id, ticker, name, price }} />
+        <OrderForm instrument={{ id: instrumentId, ticker, name, price }} />
       </ScrollView>
     </UISafeArea>
   );

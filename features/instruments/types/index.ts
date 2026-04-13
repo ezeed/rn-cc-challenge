@@ -7,7 +7,7 @@ export type InstrumentSortBy = 'ticker' | 'price' | 'profit';
 export type InstrumentSortDirection = 'asc' | 'desc';
 
 export type Instrument = {
-  id: string;
+  id: number;
   ticker: string;
   name: string;
   type: InstrumentType;

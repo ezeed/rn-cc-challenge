@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { UIAnimatedView } from '@/components/ui/ui-animated-view';
 import { UIPressable } from '@/components/ui/ui-pressable';
 import { UIText } from '@/components/ui/ui-text';
@@ -8,6 +8,7 @@ import { monitoring } from '@/lib/monitoring/monitoring';
 import { useTheme } from '@/lib/theme/theme-provider';
 import { useState } from 'react';
 import { useHTTPStatus } from '../hooks/use-http-status';
+import { UILoading } from '@/components/ui/ui-loading';
 
 type ResultState = {
   title: string;
@@ -96,7 +97,7 @@ function ErrorTester() {
           style={[styles.resultCard, { borderColor: colors.border }]}
         >
           {isPending ? (
-            <ActivityIndicator color={colors.primary} />
+            <UILoading />
           ) : (
             <UIView style={{ gap: 24 }}>
               <UIText style={styles.resultTitle}>Resultado: {result!.title}</UIText>

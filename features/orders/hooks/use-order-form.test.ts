@@ -11,13 +11,13 @@ describe('useOrderForm', () => {
     });
   });
 
-  describe('handleTypeChange', () => {
-    it('switches quantityMode to SHARES when changing to LIMIT while in AMOUNT mode', () => {
+  describe('input handlers', () => {
+    it('sanitizes decimal input for amount and limit price fields', () => {
       const { result } = renderHook(() => useOrderForm());
-      act(() => result.current.handleQuantityModeChange('AMOUNT'));
-      act(() => result.current.handleTypeChange('LIMIT'));
-      expect(result.current.form.quantityMode).toBe('SHARES');
-      expect(result.current.form.type).toBe('LIMIT');
+      act(() => result.current.handleAmountChange('12,5abc'));
+      act(() => result.current.handleLimitPriceChange('84.5.3'));
+      expect(result.current.form.amount).toBe('12.5');
+      expect(result.current.form.limitPrice).toBe('84.53');
     });
   });
 

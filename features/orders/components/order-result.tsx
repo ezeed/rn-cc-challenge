@@ -3,9 +3,10 @@ import { UIPressable } from '@/components/ui/ui-pressable';
 import { UIText } from '@/components/ui/ui-text';
 import { UIView } from '@/components/ui/ui-view';
 import { useTheme } from '@/lib/theme/theme-provider';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { OrderSubmissionViewState } from '../types';
 import { router } from 'expo-router';
+import { UILoading } from '@/components/ui/ui-loading';
 
 type Props = {
   submissionState: OrderSubmissionViewState;
@@ -21,7 +22,7 @@ export function OrderResult({ submissionState, handleReset }: Props) {
       >
         {submissionState.kind === 'pending' && (
           <UIAnimatedView key="pending" preset="fadeDown" style={styles.cardContent}>
-            <ActivityIndicator color={colors.primary} />
+            <UILoading />
             <UIText variant="title">Enviando orden</UIText>
             <UIText color="muted">Estamos procesando tu orden.</UIText>
           </UIAnimatedView>
@@ -37,6 +38,7 @@ export function OrderResult({ submissionState, handleReset }: Props) {
             <UIText variant="title">Resultado de la orden</UIText>
             <UIText>{`Id de orden: ${submissionState.result.id}`}</UIText>
             <UIText
+              variant="title"
               color={
                 submissionState.result.status === 'REJECTED'
                   ? 'danger'

@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
-import { ActivityIndicator, Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
+import { Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
 import { useTheme } from '@/lib/theme/theme-provider';
 import { UIText, UITextColor } from './ui-text';
+import { UILoading } from './ui-loading';
 
 type UIPressableTone = 'primary' | 'secondary' | 'danger';
 type UIPressableSize = 'md' | 'sm';
@@ -44,7 +45,7 @@ export function UIPressable({
 
   const sizeStyles: Record<UIPressableSize, ViewStyle> = {
     md: { minWidth: 180, paddingHorizontal: 16, paddingVertical: 12, borderRadius: 12 },
-    sm: { minWidth: 0, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999 },
+    sm: { minWidth: 0, paddingHorizontal: 8, paddingVertical: 6, borderRadius: 24 },
   };
 
   const outlineStyle: ViewStyle =
@@ -73,7 +74,7 @@ export function UIPressable({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={resolvedTextColor === 'white' ? colors.white : colors.text} />
+        <UILoading color={resolvedTextColor === 'white' ? colors.white : colors.text} />
       ) : (
         children || (
           <UIText variant="button" color={resolvedTextColor}>

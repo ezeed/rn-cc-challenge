@@ -9,7 +9,7 @@ import { TickerLogo } from '@/components/ui/ticker-logo';
 
 export function PortfolioItem({ item }: { item: PortfolioProfit }) {
   const { colors } = useTheme();
-  const totalReturnLabel = `${item.total_return >= 0 ? '+' : ''}${formatPeso(item.total_return)}`;
+  const gainLabel = `${item.gain >= 0 ? '+' : ''}${formatPeso(item.gain)}`;
 
   return (
     <UIView
@@ -31,15 +31,19 @@ export function PortfolioItem({ item }: { item: PortfolioProfit }) {
         </UIView>
         <UIView style={styles.headerValues}>
           <UIText style={{ fontWeight: 'bold' }}>{formatPeso(item.total_value)}</UIText>
-          <UIText style={{ color: item.total_return >= 0 ? colors.success : colors.danger }}>
-            {totalReturnLabel}
+          <UIText style={{ color: item.gain >= 0 ? colors.success : colors.danger }}>
+            {gainLabel}
           </UIText>
         </UIView>
       </UIView>
       <UIView style={styles.details}>
         <UIView style={styles.detailRow}>
+          <UIText color="muted">Precio actual</UIText>
+          <UIText>{formatPeso(item.last_price)}</UIText>
+        </UIView>
+        <UIView style={styles.detailRow}>
           <UIText color="muted">Rendimiento total</UIText>
-          <UITrend value={item.profit} />
+          <UITrend value={item.total_return} />
         </UIView>
       </UIView>
     </UIView>

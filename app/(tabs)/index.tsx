@@ -6,14 +6,14 @@ import { UISafeArea } from '@/components/ui/ui-safe-area';
 import { UIInput } from '@/components/ui/ui-input';
 import { UIView } from '@/components/ui/ui-view';
 import { UIPressable } from '@/components/ui/ui-pressable';
-import { ChipLabel } from '@/features/instruments/components/chip-label';
+import { UIChipLabel } from '@/components/ui/ui-chip-label';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/lib/theme/theme-provider';
 
 export default function InstrumentsScreen() {
   const { colors } = useTheme();
   const [search, setSearch] = useState('');
-  const { data: instruments, isLoading, error, refetch } = useInstruments(search);
+  const { data: instruments, isLoading, error, refetch, isRefetching } = useInstruments(search);
   const { sortBy, sortedInstruments, handleSortPress, handleResetSort, getSortArrow } =
     useInstrumentSort(instruments ?? []);
 
@@ -43,7 +43,7 @@ export default function InstrumentsScreen() {
               onPress={() => handleSortPress('ticker')}
               accessibilityLabel="Ordenar por ticker"
             >
-              <ChipLabel
+              <UIChipLabel
                 label="Ticker"
                 value="ticker"
                 sortBy={sortBy}
@@ -57,7 +57,7 @@ export default function InstrumentsScreen() {
               onPress={() => handleSortPress('price')}
               accessibilityLabel="Ordenar por precio"
             >
-              <ChipLabel
+              <UIChipLabel
                 label="Precio"
                 value="price"
                 sortBy={sortBy}
@@ -71,7 +71,7 @@ export default function InstrumentsScreen() {
               onPress={() => handleSortPress('profit')}
               accessibilityLabel="Ordenar por retorno"
             >
-              <ChipLabel
+              <UIChipLabel
                 label="Retorno"
                 value="profit"
                 sortBy={sortBy}
@@ -91,7 +91,7 @@ export default function InstrumentsScreen() {
         </UIView>
         <InstrumentsList
           instruments={sortedInstruments ?? []}
-          isLoading={isLoading}
+          isLoading={isLoading || isRefetching}
           error={error}
           onRetry={refetch}
         />

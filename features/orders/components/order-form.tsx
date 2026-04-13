@@ -18,7 +18,7 @@ import { OrderResult } from './order-result';
 
 type Props = {
   instrument: {
-    id: string;
+    id: number;
     ticker: string;
     name: string;
     price: string;

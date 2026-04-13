@@ -51,7 +51,7 @@ describe('changeOrderType', () => {
 describe('buildCreateOrderBody', () => {
   it('builds a MARKET shares order', () => {
     const form: OrderFormValues = { ...baseForm, shares: '10' };
-    expect(buildCreateOrderBody(form, '1', null)).toEqual({
+    expect(buildCreateOrderBody(form, 1,null)).toEqual({
       instrument_id: 1,
       side: 'BUY',
       type: 'MARKET',
@@ -66,7 +66,7 @@ describe('buildCreateOrderBody', () => {
       shares: '5',
       limitPrice: '84.5',
     };
-    expect(buildCreateOrderBody(form, '1', null)).toEqual({
+    expect(buildCreateOrderBody(form, 1,null)).toEqual({
       instrument_id: 1,
       side: 'BUY',
       type: 'LIMIT',
@@ -77,6 +77,6 @@ describe('buildCreateOrderBody', () => {
 
   it('uses estimatedShares as quantity in AMOUNT mode', () => {
     const form: OrderFormValues = { ...baseForm, quantityMode: 'AMOUNT', amount: '350' };
-    expect(buildCreateOrderBody(form, '1', 3).quantity).toBe(3);
+    expect(buildCreateOrderBody(form, 1,3).quantity).toBe(3);
   });
 });
