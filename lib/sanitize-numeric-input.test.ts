@@ -3,22 +3,16 @@ import { sanitizeIntegerInput, sanitizeDecimalInput } from './sanitize-numeric-i
 describe('sanitizeIntegerInput', () => {
   it('removes all non-digit characters', () => {
     expect(sanitizeIntegerInput('12abc34')).toBe('1234');
-  });
-
-  it('removes dots and commas', () => {
     expect(sanitizeIntegerInput('1.000,00')).toBe('100000');
   });
 
-  it('returns empty string when input has no digits', () => {
+  it('returns empty string when input has no digits or is empty', () => {
     expect(sanitizeIntegerInput('abc')).toBe('');
+    expect(sanitizeIntegerInput('')).toBe('');
   });
 
   it('returns the same string when input is already a valid integer', () => {
     expect(sanitizeIntegerInput('42')).toBe('42');
-  });
-
-  it('returns empty string for empty input', () => {
-    expect(sanitizeIntegerInput('')).toBe('');
   });
 });
 

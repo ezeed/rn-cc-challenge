@@ -1,3 +1,6 @@
+export type PortfolioSortBy = 'ticker' | 'value' | 'total_return';
+export type PortfolioSortDirection = 'asc' | 'desc';
+
 export type Portfolio = {
   instrument_id: number;
   ticker: string;
@@ -8,7 +11,7 @@ export type Portfolio = {
 };
 
 export type PortfolioProfit = Portfolio & {
-  profit: number;
-  total_return: number;
   total_value: number;
+  gain: number;
+  total_return: number;
 };

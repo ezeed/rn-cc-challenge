@@ -1,8 +1,10 @@
 import { InstrumentProfit } from '../types';
-import { ActivityIndicator, FlatList, RefreshControl } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import { InstrumentItem } from './instrument-item';
 import { EmptyState } from '@/components/empty-state';
 import { ErrorState } from '@/components/error-state';
+import { UILoading } from '@/components/ui/ui-loading';
+import { useTheme } from '@/lib/theme/theme-provider';
 
 type Props = {
   instruments: InstrumentProfit[];
@@ -12,8 +14,10 @@ type Props = {
 };
 
 export function InstrumentsList({ instruments, isLoading, error, onRetry }: Props) {
+  const { colors } = useTheme();
+
   if (isLoading) {
-    return <ActivityIndicator size="large" accessibilityLabel="Cargando instrumentos..." />;
+    return <UILoading accessibilityLabel="Cargando instrumentos..." />;
   }
 
   if (error) {
@@ -30,7 +34,15 @@ export function InstrumentsList({ instruments, isLoading, error, onRetry }: Prop
       contentContainerStyle={{ flexGrow: 1 }}
       data={instruments}
       ListEmptyComponent={<EmptyState message="No hay instrumentos para mostrar." />}
-      refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRetry} />}
+      refreshControl={
+        <RefreshControl
+          refreshing={isLoading}
+          onRefresh={onRetry}
+          tintColor={colors.primary}
+          colors={[colors.primary]}
+          progressBackgroundColor={colors.surface}
+        />
+      }
       keyExtractor={(instrument) => instrument.id}
       renderItem={({ item: instrument }) => <InstrumentItem item={instrument} />}
     />
