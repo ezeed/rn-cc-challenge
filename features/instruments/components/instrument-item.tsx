@@ -66,6 +66,6 @@ const styles = StyleSheet.create({
     gap: 12,
     marginBottom: 8,
   },
-  content: { flexDirection: 'column', flex: 1, minWidth: 0 },
-  values: { flexDirection: 'column', marginLeft: 'auto', alignItems: 'flex-end', gap: 4 },
+  content: { flex: 1, minWidth: 0 },
+  values: { marginLeft: 'auto', alignItems: 'flex-end', gap: 4 },
 });

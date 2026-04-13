@@ -1,8 +1,9 @@
 import { useLocalSearchParams } from 'expo-router';
 import { Platform, StyleSheet } from 'react-native';
-import { OrderFlow, OrderInstrumentSummary } from '@/features/orders';
+import { OrderForm, OrderInstrumentSummary } from '@/features/orders';
 import { UISafeArea } from '@/components/ui/ui-safe-area';
 import { ScrollView } from 'react-native-gesture-handler';
+import { ErrorState } from '@/components/error-state';
 
 export default function OrderModalScreen() {
   const { id, ticker, name, price } = useLocalSearchParams<{
@@ -11,6 +12,10 @@ export default function OrderModalScreen() {
     name?: string;
     price?: string;
   }>();
+
+  if (!id || !ticker || !name || !price) {
+    return <ErrorState message="No se encontró el instrumento seleccionado." />;
+  }
 
   return (
     <UISafeArea>
@@ -21,7 +26,7 @@ export default function OrderModalScreen() {
         showsVerticalScrollIndicator={false}
       >
         <OrderInstrumentSummary instrument={{ ticker, name, price }} />
-        <OrderFlow instrument={{ id, ticker, name, price }} />
+        <OrderForm instrument={{ id, ticker, name, price }} />
       </ScrollView>
     </UISafeArea>
   );

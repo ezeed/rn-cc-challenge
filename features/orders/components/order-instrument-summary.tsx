@@ -10,18 +10,16 @@ import { router } from 'expo-router';
 
 type Props = {
   instrument: {
-    ticker?: string;
-    name?: string;
-    price?: string;
+    ticker: string;
+    name: string;
+    price: string;
   };
 };
 
 export function OrderInstrumentSummary({ instrument }: Props) {
   const { colors } = useTheme();
-  const ticker = instrument.ticker?.toUpperCase();
-  const parsedPrice = instrument.price ? Number(instrument.price) : null;
-  const formattedPrice =
-    parsedPrice !== null && Number.isFinite(parsedPrice) ? formatPeso(parsedPrice) : '-';
+  const ticker = instrument.ticker.toUpperCase();
+  const formattedPrice = formatPeso(Number(instrument.price));
 
   return (
     <>
@@ -45,12 +43,12 @@ export function OrderInstrumentSummary({ instrument }: Props) {
           },
         ]}
       >
-        {ticker ? <TickerLogo ticker={ticker} style={styles.logo} /> : null}
+        <TickerLogo ticker={ticker} style={styles.logo} />
 
         <UIView style={styles.content}>
-          <UIText style={styles.ticker}>{ticker ?? '-'}</UIText>
+          <UIText style={styles.ticker}>{ticker}</UIText>
           <UIText color="muted" numberOfLines={1}>
-            {instrument.name ?? '-'}
+            {instrument.name}
           </UIText>
         </UIView>
 
@@ -88,6 +86,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontWeight: '700',
+    fontSize: 20,
   },
   ticker: {
     fontWeight: '700',

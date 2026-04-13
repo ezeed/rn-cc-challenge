@@ -1,7 +1,23 @@
-export type OrderSide = 'BUY' | 'SELL';
-export type OrderType = 'MARKET' | 'LIMIT';
-export type OrderStatus = 'PENDING' | 'REJECTED' | 'FILLED';
-export type OrderQuantityMode = 'SHARES' | 'AMOUNT';
+export const ORDER_SIDES = ['BUY', 'SELL'] as const;
+export type OrderSide = (typeof ORDER_SIDES)[number];
+
+export const ORDER_TYPES = ['MARKET', 'LIMIT'] as const;
+export type OrderType = (typeof ORDER_TYPES)[number];
+
+export const ORDER_STATUSES = ['PENDING', 'REJECTED', 'FILLED'] as const;
+export type OrderStatus = (typeof ORDER_STATUSES)[number];
+
+export const ORDER_QUANTITY_MODES = ['SHARES', 'AMOUNT'] as const;
+export type OrderQuantityMode = (typeof ORDER_QUANTITY_MODES)[number];
+
+export type OrderFormValues = {
+  side: OrderSide;
+  type: OrderType;
+  quantityMode: OrderQuantityMode;
+  shares: string;
+  amount: string;
+  limitPrice: string;
+};
 
 export type CreateOrderInput = {
   instrument_id: number;

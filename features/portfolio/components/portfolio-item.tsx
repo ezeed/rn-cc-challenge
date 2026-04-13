@@ -61,13 +61,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   headerContent: {
-    flexDirection: 'column',
     flex: 1,
     minWidth: 0,
     gap: 4,
   },
   headerValues: {
-    flexDirection: 'column',
     alignItems: 'flex-end',
     gap: 4,
   },
