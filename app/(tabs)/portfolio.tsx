@@ -12,7 +12,7 @@ import { useTheme } from '@/lib/theme/theme-provider';
 
 export default function PortfolioScreen() {
   const { colors } = useTheme();
-  const { data: portfolio, isLoading, error, refetch } = usePortfolio();
+  const { data: portfolio, isLoading, error, refetch, isRefetching } = usePortfolio();
   const [search, setSearch] = useState('');
 
   const filteredPortfolio = useMemo(() => {
@@ -100,7 +100,7 @@ export default function PortfolioScreen() {
         </UIView>
         <PortfolioList
           portfolio={sortedPortfolio}
-          isLoading={isLoading}
+          isLoading={isLoading || isRefetching}
           error={error}
           onRetry={refetch}
         />

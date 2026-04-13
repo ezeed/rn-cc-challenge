@@ -21,12 +21,7 @@ export function PortfolioList({ portfolio, isLoading, error, onRetry }: Props) {
   }
 
   if (error) {
-    return (
-      <ErrorState
-        message={`Error al cargar el portfolio: ${error?.message || ''}`}
-        onRetry={onRetry}
-      />
-    );
+    return <ErrorState error={error} onRetry={onRetry} />;
   }
 
   return (

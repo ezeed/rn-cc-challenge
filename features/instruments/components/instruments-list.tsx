@@ -21,12 +21,7 @@ export function InstrumentsList({ instruments, isLoading, error, onRetry }: Prop
   }
 
   if (error) {
-    return (
-      <ErrorState
-        message={`Error al cargar los instrumentos: ${error?.message || ''}`}
-        onRetry={onRetry}
-      />
-    );
+    return <ErrorState error={error} onRetry={onRetry} />;
   }
 
   return (
@@ -43,7 +38,7 @@ export function InstrumentsList({ instruments, isLoading, error, onRetry }: Prop
           progressBackgroundColor={colors.surface}
         />
       }
-      keyExtractor={(instrument) => instrument.id}
+      keyExtractor={(instrument) => String(instrument.id)}
       renderItem={({ item: instrument }) => <InstrumentItem item={instrument} />}
     />
   );

@@ -13,7 +13,7 @@ import { useTheme } from '@/lib/theme/theme-provider';
 export default function InstrumentsScreen() {
   const { colors } = useTheme();
   const [search, setSearch] = useState('');
-  const { data: instruments, isLoading, error, refetch } = useInstruments(search);
+  const { data: instruments, isLoading, error, refetch, isRefetching } = useInstruments(search);
   const { sortBy, sortedInstruments, handleSortPress, handleResetSort, getSortArrow } =
     useInstrumentSort(instruments ?? []);
 
@@ -91,7 +91,7 @@ export default function InstrumentsScreen() {
         </UIView>
         <InstrumentsList
           instruments={sortedInstruments ?? []}
-          isLoading={isLoading}
+          isLoading={isLoading || isRefetching}
           error={error}
           onRetry={refetch}
         />
