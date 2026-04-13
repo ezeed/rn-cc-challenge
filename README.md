@@ -59,7 +59,7 @@ EXPO_PUBLIC_SENTRY_DSN= # optional — leave blank to disable error monitoring
 ### Build de la app
 
 **Android APK:**
-- [Download APK](https://expo.dev/accounts/ezeed/projects/rn-cc-challenge/builds/f8487e40-099d-431f-99ed-50a5b03213a2)
+- [Download APK](https://expo.dev/accounts/ezeed/projects/rn-cc-challenge/builds/7139bb8d-612d-4510-a710-41316cf62340)
 
 Crear un nuevo build:
 
